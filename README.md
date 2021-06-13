@@ -2,8 +2,8 @@ AWS Auto Discovery for JGroups
 ==============================
 Overview
 --------
-This package provides auto discovery for other custer members on AWS using both tag matching and filters.  It is
-a drop in replacement for TCPPING, allowing you to remove the definition of your initial members from your configuraiton
+This package provides auto discovery for other cluster members on AWS using both tag matching and filters.  It is
+a drop in replacement for TCPPING, allowing you to remove the definition of your initial members from your configuration
 file.
 
 Usage
@@ -14,7 +14,7 @@ To use AWS auto discovery, you need to add a dependency to this package in your 
     <dependency>
       <groupId>com.meltmedia.jgroups</groupId>
       <artifactId>jgroups-aws</artifactId>
-      <version>1.4.1</version>
+      <version>1.6.1</version>
     </dependency>
 ```
 
@@ -22,7 +22,6 @@ and then replace TCPPING in your stack with com.meltmedia.jgroups.aws.AWS_PING:
 
 ```
     <com.meltmedia.jgroups.aws.AWS_PING
-         timeout="3000"
          port_number="7800"
          tags="TAG1,TAG2"
          filters="NAME1=VALUE1,VALUE2;NAME2=VALUE3"
@@ -35,9 +34,26 @@ see the configuration section for information.  You can find an example stack in
 This implementation will only work from inside EC2, since it uses environment information to auto wire itself.  See the
 Setting Up EC2 section for more information.
 
+SNAPSHOTs of the project are located in the Sonatype Nexus Snapshots repository.  You can use SNAPSHOTs by adding the following repository to your project:
+
+```
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+```
+
+And then update your dependency to the current SNAPSHOT version.
+
 Configuration Options
 ---------------------
-* timeout - the timeout in milliseconds
 * port_number - the port number that the nodes will communicate over.  This needs to be the same on all nodes.  The default is 7800.
 * port_range - the number of additional ports to be probed for membership. A port_range of 0 does not probe additional ports. Example: initial_hosts=A[7800] port_range=0 probes A:7800, port_range=1 probes A:7800 and A:7801.  The default is 50.
 * tags - A comma delimited list of EC2 node tag names.  The current nodes values are matched against other nodes to find
